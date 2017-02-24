@@ -3,8 +3,10 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.file.Files;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -18,6 +20,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -53,16 +57,34 @@ public class Server {
 		this.serverPrivateKey = serverPrivateKey;
 		this.clientPublicKey = clientPublicKey;
 	}
-	
-	/**
-	 * serverProcess() is responsible for socket creation and sharing random number, reciving actual file content
-	 */
+	public static void main(String[] args)
+	{
+		Scanner s= new Scanner(System.in);
+		System.out.println("enter server IP");
+		String serverIP=s.next();
+		System.out.println("Enter the port you want to use for server");
+		int serverport=s.nextInt();
+		System.out.println("Enter client IP");
+		String clientIP=s.next();
+		System.out.println("Enter the client port");
+		int clientport=s.nextInt();
+		System.out.println("Enter Server's private key file path");
+		String sPrivateKey=s.next();
+		System.out.println();
+		System.out.println("Enter client's public key file path");
+		String cPublicKey=s.next();
+		Server server=new Server(serverIP, serverport, clientIP, clientport,new File(sPrivateKey), new File(cPublicKey));
+		server.serverProcess();
+	}
+
+//	serverProcess() is responsible for socket creation and sharing random number, reciving actual file content
 	
 	public void serverProcess() //throws IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, NoSuchProviderException
 	{
 		byte[] message1, message2;
 		try {
-	        serverSocket = new ServerSocket(serverPort);
+	        serverSocket = new ServerSocket();
+	        serverSocket.bind(new InetSocketAddress(serverIP, serverPort));
 	        System.out.println("Starting server on "+serverSocket.getLocalPort());
 			while(true)
 			{

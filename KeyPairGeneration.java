@@ -17,10 +17,10 @@ import java.security.spec.X509EncodedKeySpec;
  */
 public class KeyPairGeneration {
 	
-	String serverPublicKeyFile = "C:\\Users\\Greeshma Reddy\\Desktop\\Spring2017\\COMS559\\serverpublic.txt",
-			serverPrivateKeyFile = "C:\\Users\\Greeshma Reddy\\Desktop\\Spring2017\\COMS559\\serverprivate.txt",
-			clientPublicKeyFile = "C:\\Users\\Greeshma Reddy\\Desktop\\Spring2017\\COMS559\\clientpublic.txt",
-			clientPrivateKeyFile = "C:\\Users\\Greeshma Reddy\\Desktop\\Spring2017\\COMS559\\clientprivate.txt";	
+	String serverPublicKeyFile = "./serverpublic.txt",
+			serverPrivateKeyFile = "./serverprivate.txt",
+			clientPublicKeyFile = "./clientpublic.txt",
+			clientPrivateKeyFile = "./clientprivate.txt";	
 
 	public KeyFactory keyFactory1, keyFactory2;
 	public PublicKey serverPublicKey, clientPublicKey;

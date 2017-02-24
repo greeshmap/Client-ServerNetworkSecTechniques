@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.file.Files;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -18,6 +20,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -58,14 +62,40 @@ public class Client {
 		this.content = content;
 	}
 	
+	
+	public static void main(String[] args)
+	{
+		Scanner s= new Scanner(System.in);
+		System.out.println("enter client IP");
+		String clientIP=s.next();
+		System.out.println("Enter the port you want to use for client");
+		int clientport=s.nextInt();
+		System.out.println("Enter server IP");
+		String serverIP=s.next();
+		System.out.println("Enter the server's port");
+		int serverport=s.nextInt();
+		System.out.println("Enter client's private key file path");
+		String cPrivateKey=s.next();
+		System.out.println("Enter server's public key file path");
+		String sPublicKey=s.next();
+		System.out.println("Enter actual text file path");
+		String content=s.next();
+		Client client=new Client(clientIP, clientport, serverIP, serverport,new File(cPrivateKey), new File(sPublicKey), new File(content));
+		client.clientProcess();
+	}
+	
+	
+	
 	/**
 	 * Client method responsible for sharing keys and random numbers. Sends the file content to server
 	 */
 	void clientProcess()
 	{		
 	    try {
-	    	InetAddress address = InetAddress.getByName(serverIP);
-	    	clientSocket = new Socket(address.getHostAddress(), serverPort);
+	    	clientSocket = new Socket();
+	        SocketAddress SA= new InetSocketAddress(clientIP, clientPort);
+	    	clientSocket.bind(SA);
+	    	clientSocket.connect(new InetSocketAddress(serverIP, serverPort));
 	    	System.out.println("client started on"+ clientSocket.getLocalPort());
 //	    	generate a 128 bit random number
 	    	BigInteger r_A = new BigInteger(128, new Random());	    	
